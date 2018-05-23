@@ -4,7 +4,21 @@ from datetime import datetime
 import dateutil.parser
 import json
 
-months = "Jan Feb Mar Apr Maj Jun Jul Aug Sep Okt Nov Dec".lower().split(" ")
+months = "Jan Feb Mar Apr Maj Juni Jul Aug Sep Okt Nov Dec".lower().split(" ")
+
+def parse_string_date(text):
+	day, month = text.split(' ')
+
+	now = datetime.now()
+
+	# guess the year
+	date = datetime(now.year, months.index(month.lower()) + 1, int(day))
+
+	# if the date is before now, assume it's next year
+	if date > now:
+		date = datetime(now.year + 1, date.month, date.day)
+	
+	return date
 
 def parse_date(bs):
 	#bs_day = bs.find("p", class_="day").text.split(" ")
@@ -47,14 +61,17 @@ def parse_apartment_page(bs):
 	bs_included = bs_properties.find_next_sibling("div")
 	bs_floorplan = bs.find("img", class_="floorplan")
 
+	bs_apply_before = bs.find("td", string="Anmäl senast:").find_next_sibling("td")
+
 	data = {
 		'position': None,
 		
 		'preconditions': parse_properties(bs_preconditions),
 		'properties': parse_properties(bs_properties),
-		'included': parse_properties(bs_included)
-	}
+		'included': parse_properties(bs_included),
 
+		'apply_before': parse_string_date(bs_apply_before.string.strip())
+	}
 
 	if bs_floorplan is not None:
 		data['photo_floorplan'] = bs_floorplan['src']

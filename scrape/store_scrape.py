@@ -30,8 +30,9 @@ for apartment in results:
     store_apartment(updated_apartment)
   except KeyboardInterrupt:
     raise
-  except:
-    print("exception")
+  except Exception as e:
+    print("Failed to update full apartment")
+    print(e)
     retries -= 1
     if retries >= 0:
       continue

@@ -48,6 +48,9 @@ export default new GraphQLObjectType({
     move_in_date: {
       type: GraphQLString
     },
+    apply_before: {
+      type: GraphQLString
+    },
     rent: {
       type: GraphQLInt
     },

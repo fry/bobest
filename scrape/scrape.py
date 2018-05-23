@@ -15,7 +15,7 @@ def parse_string_date(text):
 	date = datetime(now.year, months.index(month.lower()) + 1, int(day))
 
 	# if the date is before now, assume it's next year
-	if date > now:
+	if date < now:
 		date = datetime(now.year + 1, date.month, date.day)
 	
 	return date

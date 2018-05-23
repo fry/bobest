@@ -17,19 +17,21 @@ def parse_apartment(bs):
 	bs_rent = bs.find("div", class_="rent rentColumn")
 	
 	data = {
-		'rent': bs_rent["data-value"],
+		'rent': int(bs_rent["data-value"]),
 		'area': bs.find("p", class_="area").text,
 		'address': bs.find("p", class_="address").text,
 		'size': float(bs_size["data-value"]),
 		'rooms': bs_size.find_all("p")[1].text,
-		'publish_date': parse_date(bs.find("div", class_="publishdate")).isoformat(),
-		'move_in_date': parse_date(bs.find("div", class_="moveindate")).isoformat(),
+		'publish_date': parse_date(bs.find("div", class_="publishdate")),
+		'move_in_date': parse_date(bs.find("div", class_="moveindate")),
 		'photo': bs.find("img", class_="photo")["src"],
 		'url': bs.find("a")["href"]
 	}
 
 	if bs_floor is not None:
-		data['floor'] = bs_floor.text
+		cleaned_floor = bs_floor.text.strip()
+		if len(cleaned_floor) > 0:
+			data['floor'] = cleaned_floor
 
 	data["external_id"] = data["url"].split("/")[-1]
 

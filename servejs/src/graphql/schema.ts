@@ -1,40 +1,59 @@
-import {
-  GraphQLSchema,
-  GraphQLObjectType,
-  GraphQLList,
-  GraphQLString
-} from 'graphql';
+import { makeExecutableSchema } from 'graphql-tools';
 
-import db from '../db'
-import apartment from './apartment'
 
-export default new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: "Query",
-    fields: {
-      apartment: {
-        type: new GraphQLList(apartment),
-        args: {
-          id: {
-            type: GraphQLString
-          },
+import { Apartment } from '../db'
 
-          external_id: {
-            type: GraphQLString
-          }
-        },
-        resolve(root, {id, external_id}) {
-          console.log("req", id, external_id)
-          const query: any = {}
-          if (external_id)
-            query['external_id'] = external_id
-          if (id)
-            query['_id'] = id
+const typeDefs = `
+type Position {
+  lat: Float
+  long: Float
+}
 
-          return db.apartments!.find(query).toArray()
-        }
-      }
+type Property {
+  id: String
+  name: String
+}
+
+type Apartment {
+  _id: ID
+  external_id: ID
+  address: String
+  area: String
+  floor: String
+  position: Position
+  preconditions: [Property]
+  included: [Property]
+  properties: [Property]
+  publish_date: String
+  move_in_date: String
+  apply_before: String
+  rent: Int
+  size: Int
+  rooms: String
+  url: String
+  photo: String
+  photo_floorplan: String
+}
+
+type Query {
+  apartment(id: ID): [Apartment]
+}
+`
+
+const resolvers: any = {
+  Query: {
+    apartment(id: String) {
+      const query: any = {}
+      // if (external_id)
+      //   query['external_id'] = external_id
+      if (id)
+        query['_id'] = id
+
+      return Apartment.find(query).exec()
     }
-  })
-})
+  }
+}
 
+export default makeExecutableSchema({
+  typeDefs, resolvers
+})

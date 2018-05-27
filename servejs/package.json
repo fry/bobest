@@ -16,7 +16,9 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
-    "mongodb": "^3.1.0-beta4"
+    "graphql-tools": "^3.0.2",
+    "mongodb": "^3.1.0-beta4",
+    "mongoose": "^5.1.2"
   },
   "devDependencies": {
     "@types/dotenv": "^4.0.3",
@@ -24,6 +26,7 @@
     "@types/express-graphql": "^0.6.1",
     "@types/graphql": "^0.13.1",
     "@types/mongodb": "^3.0.18",
+    "@types/mongoose": "^5.0.14",
     "nodemon": "^1.17.5",
     "tslint": "^5.10.0",
     "tslint-config-airbnb": "^5.9.2",

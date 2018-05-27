@@ -1,4 +1,4 @@
-import db from './db'
+import { Apartment } from './db'
 import schema from './graphql/schema'
 
 import * as express from 'express'
@@ -16,7 +16,7 @@ class App {
     const router = express.Router()
     router.get('/api/json', async (req, res) => {
       try {
-        const apartments = await db.apartments!.find({}).toArray();
+        const apartments = await Apartment.find({}).exec()
         res.json({
           apartments: apartments
         })
